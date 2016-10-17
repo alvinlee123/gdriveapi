@@ -51,6 +51,8 @@ def get_credentials():
     return credentials
 
 def main():
+
+
     """Shows basic usage of the Google Drive API.
 
     Creates a Google Drive API service object and outputs the names and IDs
@@ -62,18 +64,17 @@ def main():
 
     page_token = None
     while True:
-        response = service.files().list( q="fullText contains 'IMG' or name contains 'IMG' or 'cisco' in parents",
+        response = service.files().list( q="fullText contains 'IMG' or name contains 'IMG'",
                                          spaces='drive',
                                          fields='nextPageToken, files(id, name, fileExtension, owners,webViewLink)',
                                          pageToken=page_token).execute()
         for file in response.get('files', []):
-            text=file.get('owners')
             #print (file.get('owners'))
-            for i in text:
-                print (i)
             #parsed_json=json.load(text)
-            #print ('%s %s %s %s %s' % (file.get('name'), file.get('id')[2],file.get('fileExtension'),file.get('webViewLink'),file.get('ownerNames')))
-           # print (parsed_json[displayName])
+            with open('test.txt','a') as myfile:
+                myfile.write('%s\t %s\t %s\t %s\t %s' % (file.get('name'), file.get('id')[2],file.get('fileExtension'),file.get('webViewLink'),file.get('owners')))
+            # print (parsed_json[displayName])
+            
         page_token = response.get('nextPageToken', None)
         if page_token is None:
             break;
